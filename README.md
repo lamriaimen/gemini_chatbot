@@ -2,7 +2,7 @@
 
 A production-ready AI chatbot application built with Next.js, Supabase, and Google Gemini. Features real-time streaming responses, conversation history, and a beautiful, responsive UI.
 
-🚀 **[Live Demo](#)** (Deploy link will be added after Vercel deployment)
+🚀 **[Live Demo](https://vercel.com/aimens-projects-414a3ad4/gemini-chatbot/B8opod5jBg2CyNRWvY3CsYCKftG2)**
 
 ## Features
 
