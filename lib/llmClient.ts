@@ -14,7 +14,7 @@ export class LLMClient {
   private maxTokens: number;
 
   constructor(
-    modelName: string = 'gemini-pro',
+    modelName: string = 'gemini-1.5-flash-8b',
     temperature: number = 0.7,
     maxTokens: number = 2048
   ) {
