@@ -40,8 +40,9 @@ This document explains the key architectural decisions, system design, and techn
 
 #### Authentication
 - **Provider**: Supabase Auth
-- **Flow**: Email/password authentication
-- **Protection**: Middleware intercepts routes and validates session
+- **Flow**: Email/password authentication with auto-login after signup
+- **Protection**: Client-side auth check in chat page (no email confirmation required)
+- **Session**: Cookie-based session managed by Supabase
 
 ## Key Design Decisions
 
@@ -49,10 +50,10 @@ This document explains the key architectural decisions, system design, and techn
 
 **Rationale:**
 - Server Components reduce client-side JavaScript bundle size
-- Built-in middleware for route protection
 - Edge Runtime enables low-latency streaming responses
 - Excellent TypeScript support
 - Easy deployment to Vercel
+- Simplified routing with file-based structure
 
 ### 2. Why Supabase?
 
@@ -68,10 +69,13 @@ This document explains the key architectural decisions, system design, and techn
 ### 3. Why Gemini over other LLMs?
 
 **Rationale:**
-- Free API key with generous limits
+- Free API key with generous limits (using gemini-2.5-flash model)
 - Fast streaming performance
 - Good quality responses for general chat
 - Easy to swap (abstracted behind `LLMClient` interface)
+- Latest model with improved capabilities
+
+**Current Model**: `gemini-2.5-flash` - the latest fast model with enhanced performance.
 
 **Abstraction**: The `llmClient.ts` can be swapped for OpenAI, Claude, or any other provider without changing the app logic.
 
@@ -126,9 +130,10 @@ This document explains the key architectural decisions, system design, and techn
 - Even if application has a bug, database prevents unauthorized access
 
 ### 3. Authentication Flow
-- Middleware validates session on every protected route
+- Client-side auth check in chat page redirects unauthenticated users
 - Sessions stored in HTTP-only cookies (not accessible via JS)
 - Supabase handles password hashing and security best practices
+- Auto-login after signup for smooth onboarding (email confirmation disabled)
 
 ## Performance Optimizations
 
