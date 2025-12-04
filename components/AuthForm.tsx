@@ -13,12 +13,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       if (mode === 'signup') {
@@ -26,22 +28,19 @@ export default function AuthForm({ mode }: AuthFormProps) {
           email,
           password,
         });
-        
+
         if (error) throw error;
-        
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        
-        if (signInError) throw signInError;
-        router.push('/chat');
+
+        // Show success message about email confirmation
+        setSuccess('Account created! Please check your email to confirm your account before logging in.');
+        setLoading(false);
+        return; // Don't auto-login, wait for email confirmation
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
-        
+
         if (error) throw error;
         router.push('/chat');
       }
@@ -72,7 +71,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           placeholder="you@example.com"
         />
       </div>
-      
+
       <div>
         <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1">
           Password
@@ -88,6 +87,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
           placeholder="••••••••"
         />
       </div>
+
+      {success && (
+        <div className="p-3 bg-green-900 bg-opacity-20 border border-green-800 rounded-md text-green-300 text-sm">
+          {success}
+        </div>
+      )}
 
       {error && (
         <div className="p-3 bg-red-900 bg-opacity-20 border border-red-800 rounded-md text-red-300 text-sm">
